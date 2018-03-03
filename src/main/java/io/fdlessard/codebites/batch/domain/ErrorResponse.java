@@ -1,4 +1,4 @@
-package io.fdlessard.codebites.batch.example1;
+package io.fdlessard.codebites.batch.domain;
 
 import lombok.Builder;
 import lombok.Data;

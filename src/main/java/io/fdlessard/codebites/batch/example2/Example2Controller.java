@@ -1,9 +1,10 @@
-package io.fdlessard.codebites.batch.example1;
+package io.fdlessard.codebites.batch.example2;
 
 
 import io.fdlessard.codebites.batch.domain.Customer;
 import io.fdlessard.codebites.batch.domain.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,14 +14,14 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("example1")
-public class Example1Controller {
+@RequestMapping("example2")
+public class Example2Controller {
 
 
     @GetMapping("/customer")
-    public List<Response> getAllCustomers() {
+    public List<ResponseEntity> getAllCustomers() {
 
-        List<Response> responses = new ArrayList<>();
+        List<ResponseEntity> responses = new ArrayList<>();
 
         Customer customer = Customer.builder()
                 .id("id1")
@@ -28,7 +29,7 @@ public class Example1Controller {
                 .lastName("lastName1")
                 .company("company1")
                 .build();
-        responses.add(buildResponse(customer));
+        responses.add(ResponseEntity.ok(customer));
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .status(400)
@@ -36,7 +37,7 @@ public class Example1Controller {
                 .message("Issue With Customer 2")
                 .moreInfo("http://www.error.com")
                 .build();
-        responses.add(buildResponse(errorResponse));
+        responses.add(ResponseEntity.badRequest().body(errorResponse));
 
         customer = Customer.builder()
                 .id("id3")
@@ -44,18 +45,10 @@ public class Example1Controller {
                 .lastName("lastName3")
                 .company("company3")
                 .build();
-        responses.add(buildResponse(customer));
+
+        responses.add(ResponseEntity.ok(customer));
 
 
         return responses;
     }
-
-    private Response buildResponse(Customer customer) {
-        return new Response(200, null, customer);
-    }
-
-    private Response buildResponse(ErrorResponse errorResponse) {
-        return new Response(400, null, errorResponse);
-    }
-
 }
